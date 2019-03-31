@@ -34,46 +34,46 @@ let players: [Int:[String : Any]] = [
          "height": 42,
          "playedBefore":true,
          "guardianFullName": "Heather Bledsoe"],
-   8 : ["name":"Suzane Greenberg",
+    8 : ["name":"Suzane Greenberg",
          "height": 44,
          "playedBefore":true,
          "guardianFullName": "Henrietta Dumas"],
-   9 : ["name":"Sal Dali",
-        "height": 41,
-        "playedBefore":false,
-        "guardianFullName": "Gala Dali"],
-   10 : ["name":"Joe Kavalier",
-        "height":39,
-        "playedBefore":false,
-        "guardianFullName": "Sam and Elaine Kavalier"],
-   11 : ["name":"Ben Finkelstein",
-        "height":44,
-        "playedBefore":false,
-        "guardianFullName": "Aaron and Jill Finkelstein"],
-   12 : ["name":"Diego Soto",
-        "height": 41,
-        "playedBefore":true,
-        "guardianFullName": "Robin and Sarika Soto"],
-   13 : ["name":"Chloe Alaska",
-        "height": 47,
-        "playedBefore": false,
-        "guardianFullName": "David and Jamie Alaska"],
-   14 : ["name":"Arnold Willis",
-        "height": 43,
-        "playedBefore": false,
-        "guardianFullName": "Claire Willis"],
-   15 : ["name":"Phillip Helm",
-        "height": 44,
-        "playedBefore":true,
-        "guardianFullName": "Thomas Helm and Eva Jones"],
-   16 : ["name":"Les Clay",
-        "height": 42,
-        "playedBefore":true,
-        "guardianFullName": "Wynonna Brown"],
-   17 : ["name":"Herschel Krustofski",
-        "height": 45,
-        "playedBefore":true,
-        "guardianFullName": "Hyman and Rachel Krustofski"]
+    9 : ["name":"Sal Dali",
+         "height": 41,
+         "playedBefore":false,
+         "guardianFullName": "Gala Dali"],
+    10 : ["name":"Joe Kavalier",
+          "height":39,
+          "playedBefore":false,
+          "guardianFullName": "Sam and Elaine Kavalier"],
+    11 : ["name":"Ben Finkelstein",
+          "height":44,
+          "playedBefore":false,
+          "guardianFullName": "Aaron and Jill Finkelstein"],
+    12 : ["name":"Diego Soto",
+          "height": 41,
+          "playedBefore":true,
+          "guardianFullName": "Robin and Sarika Soto"],
+    13 : ["name":"Chloe Alaska",
+          "height": 47,
+          "playedBefore": false,
+          "guardianFullName": "David and Jamie Alaska"],
+    14 : ["name":"Arnold Willis",
+          "height": 43,
+          "playedBefore": false,
+          "guardianFullName": "Claire Willis"],
+    15 : ["name":"Phillip Helm",
+          "height": 44,
+          "playedBefore":true,
+          "guardianFullName": "Thomas Helm and Eva Jones"],
+    16 : ["name":"Les Clay",
+          "height": 42,
+          "playedBefore":true,
+          "guardianFullName": "Wynonna Brown"],
+    17 : ["name":"Herschel Krustofski",
+          "height": 45,
+          "playedBefore":true,
+          "guardianFullName": "Hyman and Rachel Krustofski"]
 ]
 
 // Teams Data Model
@@ -103,7 +103,7 @@ var letters : [String] = []
  - Parameter players: Array:Dictionary with list of players
  
  - Returns: nil
-*/
+ */
 func classifyExperienceOflayers(from players: [Int:[String : Any]] ) -> () {
     for (index, player) in players {
         if player["playedBefore"] as! Bool == true {
@@ -115,16 +115,16 @@ func classifyExperienceOflayers(from players: [Int:[String : Any]] ) -> () {
 }
 
 /**
- Ramdomly chooses a team for a player
- https://developer.apple.com/documentation/swift/set
+ Pick a team at random
  
  - Parameter: nil
  
- - Return: Team name or "n/a"
+ - Return: Team name OR "n/a"
  */
 func chooseRandomTeam() -> String {
     
     // resets the dataset
+    // https://developer.apple.com/documentation/swift/set
     if alreadyChoosenTeams.count == totalNumberOfTeams {
         alreadyChoosenTeams.removeAll()
     }
@@ -145,42 +145,52 @@ func chooseRandomTeam() -> String {
 
 
 /**
- Adds player to a team
+ Assings a player to a team and prepares a welcome letter
  
  - Parameter team: The name of the team
  - Parameter player: The Id of the player within the players data model
+ - Parameter letter: Boolean if to create a welcome letter or not
  
  - Return: nil
  */
-func assingPlayers(to team:String, for player: Int) -> () {
-
+func assingPlayer(to team:String, for player: Int, create letter: Bool? = nil) -> () {
+    
+    var teamName = ""
     guard let player = players[player] else {
         return
     }
-
+    
     switch team {
     case "teamSharks":
         Sharks.append(player)
+        teamName = "Sharks"
     case "teamDragons":
         Dragons.append(player)
+        teamName = "Dragons"
     default:
         Raptors.append(player)
+        teamName = "Raptors"
+    }
+    
+    // Create a Welcome letter
+    if letter != nil && letter == true {
+        createWelcomeLetters(to: player, for: teamName)
     }
 }
 
 /**
- Assings an experiences and non experience player to the same team
- for all teams to have the same level of players
+ Iterate through all players to assing an experiences and non experience
+ player to the same team, for all teams to have the same level of players
  
  -Parameter: nil
  
  - Return: nil
-*/
+ */
 func assingPlayersToTeams() -> () {
     let totalNumberOfPlayers: Int = players.count
-
+    
     var counter = 1
-
+    
     // loop through each player
     while counter <= totalNumberOfPlayers {
         
@@ -198,21 +208,21 @@ func assingPlayersToTeams() -> () {
             
             pickPlayer = Int.random(in: 0 ... playersWithExperience.count - 1)
             
-            // assign an experienced player to the ramdom selected team
-            assingPlayers(to: teamName, for: playersWithExperience[pickPlayer])
+            // assign an experienced player to the ramdom selected team and create a welcome letter
+            assingPlayer(to: teamName, for: playersWithExperience[pickPlayer], create: true)
             
             //remove form the set
             playersWithExperience.remove(at: pickPlayer)
         }
-
-
+        
+        
         // pick a non experienced player
         if !playersWithoutExperience.isEmpty {
             
             pickPlayer = Int.random(in: 0 ... playersWithoutExperience.count - 1)
             
-            // assign a NON experienced player to the same random team
-            assingPlayers(to: teamName, for: playersWithoutExperience[pickPlayer])
+            // assign a NON experienced player to the same random team and create a welcome letter
+            assingPlayer(to: teamName, for: playersWithoutExperience[pickPlayer], create: true)
             
             //remove form the set
             playersWithoutExperience.remove(at: pickPlayer)
@@ -223,52 +233,50 @@ func assingPlayersToTeams() -> () {
 }
 
 /**
- Send welcome letter to players within a team
+ Creates a welcome letter and stores it in the letters constant variable
  
- - Parameter team: Teams' data
- - Parameter name: Name of the team
+ - Parameter player: Player information
+ - Parameter team: Name of the team
  
  - Return: nil
-*/
-func setWelcomeLetters(to team:[[String:Any]], with name:String) -> () {
+ */
+func createWelcomeLetters(to player:[String:Any], for team:String) -> () {
     
-    let practiceDate = setPracticeDate(for: name)
+    let practiceDate = setPracticeDate(for: team)
     let schedule = allTeamsSchedule()
     
-    for (index, _) in team.enumerated() {
-        let playerName = team[index]["name"] as! String
-        let guardian = team[index]["guardianFullName"] as! String
-        
-        
-        let letterStringLiteral = """
-        Dear \(playerName),
-        We are pleased to inform you that you have made it to the \(name)'s Team
-        Be ready to your first day of practice on \(practiceDate)
-        
-        \(guardian), as a guardian, please don't forget to bring snacks.
-        
-        Looking forward to see you all in the fields.
-        
-        Here is the schedule for all the teams:
-        \(schedule)
-        
-        Thanks
-        
-        Coach Robin
-        
-        """
-        //append letter to letters
-        letters.append(letterStringLiteral)
-    }
+    let playerName = player["name"] as! String
+    let guardian = player["guardianFullName"] as! String
+    
+    
+    let letterStringLiteral = """
+    Dear \(playerName),
+    
+    We are pleased to inform you that you have made it to the \(team)'s Team.
+    
+    Be ready to your first day of practice on \(practiceDate).
+    
+    \(guardian), as a guardian, please don't forget to bring snacks.
+    
+    Looking forward to see you all in the fields.
+    
+    Here is the schedule for all the teams: \(schedule)
+    
+    Thanks
+    Coach Robin
+    
+    """
+    //append letter to letters
+    letters.append(letterStringLiteral)
 }
 
 /**
- gets the schedule for all teams
+ Provide the schedule for all teams
  
  - Parameter: nil
  
  - Return: String with the schedule of all the teams
-*/
+ */
 func allTeamsSchedule() -> String {
     
     var teamsPractideDates = ""
@@ -290,12 +298,12 @@ func allTeamsSchedule() -> String {
 }
 
 /**
- sets practice time
+ Sets the team practice date and time
  
  - Parameter team: The name of the team
  
  - Return: Date formated as a string
-*/
+ */
 func setPracticeDate(for team:String) -> String {
     
     var date: Date? = nil
@@ -316,7 +324,7 @@ func setPracticeDate(for team:String) -> String {
     default:
         date = dateFormatter.date(from: "March 18, 2019 1:00 PM")
     }
-   
+    
     dateFormatter.dateFormat = "MMM d, ha"
     let praticeDate = dateFormatter.string(from: date!)
     
@@ -329,15 +337,6 @@ classifyExperienceOflayers(from: players)
 // Assign players to a random team
 assingPlayersToTeams()
 
-// send welcome letter to Sharks
-setWelcomeLetters(to: Sharks, with: "Sharks")
-
-// send welcome letter to Dragons
-setWelcomeLetters(to: Dragons, with: "Dragons")
-
-// send welcome letter to Raptors
-setWelcomeLetters(to: Raptors, with: "Raptors")
-
 for (index, value) in letters.enumerated() {
-    print("\(index) => \(value)")
+    print("LETTER TO PLAYER NUMBER: \(index + 1)\n\n\(value)\n\n-----------------------------------------\n")
 }
