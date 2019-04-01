@@ -153,7 +153,7 @@ func chooseRandomTeam() -> String {
  
  - Return: nil
  */
-func assingPlayer(to team:String, for player: Int, create letter: Bool? = nil) -> () {
+func assingPlayer(to team:String, for player: Int, create letter: Bool? = false) -> () {
     
     var teamName = ""
     guard let player = players[player] else {
@@ -173,7 +173,7 @@ func assingPlayer(to team:String, for player: Int, create letter: Bool? = nil) -
     }
     
     // Create a Welcome letter
-    if letter != nil && letter == true {
+    if letter == true {
         createWelcomeLetters(to: player, for: teamName)
     }
 }
